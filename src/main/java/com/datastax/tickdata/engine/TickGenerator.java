@@ -71,15 +71,17 @@ public class TickGenerator implements Iterator<TimeSeries> {
 
 			startPrice = this.createRandomValue(startPrice);
 
-			today = today.plusMillis(1);
+			today = today.plusSeconds(1);
 		}
 		counter++;
 
 		dates.trimToSize();
 		prices.trimToSize();
 
-		return new TimeSeries(exchangeSymbol + "-" + formatter.format(today.toDate()), dates.elements(),
-				prices.elements());
+		TimeSeries timeSeries = new TimeSeries(exchangeSymbol + "-" + formatter.format(today.toDate()), dates.elements(),
+					prices.elements());
+		
+		return timeSeries;
 	}
 
 	@Override

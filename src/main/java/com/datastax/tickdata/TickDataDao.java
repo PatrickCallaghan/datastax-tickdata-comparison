@@ -50,9 +50,6 @@ public class TickDataDao {
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.zzz"); 
 
 	public TickDataDao(String[] contactPoints) {
-
-		String remoteDC = PropertyHelper.getProperty("remoteDC", "");
-		int replicasRemoteDC = Integer.parseInt(PropertyHelper.getProperty("replicasRemoteDC", "2"));
 		
 		cluster = Cluster.builder()
 				.addContactPoints(contactPoints).build();
@@ -135,10 +132,12 @@ public class TickDataDao {
 
 	public void insertTickData(List<TickData> list) throws Exception{
 		BoundStatement boundStmt;
+		
 		List<ResultSetFuture> results = new ArrayList<ResultSetFuture>();
 		
 		for (TickData tickData : list) {
 			boundStmt = new BoundStatement(this.insertStmtTick);
+			boundStmt.setIdempotent(true);
 			DateTime dateTime = tickData.getTime() != null ? tickData.getTime() : DateTime.now();
 						
 			boundStmt.setString(0, tickData.getKey());
