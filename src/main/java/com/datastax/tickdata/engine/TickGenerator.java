@@ -41,9 +41,8 @@ public class TickGenerator implements Iterator<TimeSeries> {
 				counter = 0;
 				
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(20);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -58,8 +57,8 @@ public class TickGenerator implements Iterator<TimeSeries> {
 	public TimeSeries next() {
 		String exchangeSymbol = exchangeSymbols.get(counter);
 
-		DateTime today = startDateTime.withHourOfDay(8).withMinuteOfHour(0).withSecondOfMinute(0);
-		DateTime endTime = startDateTime.withHourOfDay(16).withMinuteOfHour(30).withSecondOfMinute(0);
+		DateTime today = startDateTime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0);
+		DateTime endTime = startDateTime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
 
 		LongArrayList dates = new LongArrayList();
 		DoubleArrayList prices = new DoubleArrayList();
@@ -72,7 +71,7 @@ public class TickGenerator implements Iterator<TimeSeries> {
 
 			startPrice = this.createRandomValue(startPrice);
 
-			today = today.plusMillis(new Double(Math.random() * 500).intValue() + 1);
+			today = today.plusMillis(1);
 		}
 		counter++;
 

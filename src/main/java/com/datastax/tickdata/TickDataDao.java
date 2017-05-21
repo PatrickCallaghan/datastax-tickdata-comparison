@@ -66,12 +66,13 @@ public class TickDataDao {
 		this.selectStmtTick.setConsistencyLevel(ConsistencyLevel.ONE);
 		this.selectRangeStmtTick = session.prepare(SELECT_FROM_TICK_RANGE);		
 		this.selectRangeStmtTick.setConsistencyLevel(ConsistencyLevel.ONE);
+				
 	}
 	
 	public TimeSeries getTickData(String symbol){
 		
 		BoundStatement boundStmt = new BoundStatement(this.selectStmtTick);
-		boundStmt.setString(0, symbol);
+		boundStmt.setString(0, symbol);	
 		
 		ResultSet resultSet = session.execute(boundStmt);		
 		Iterator<Row> iterator = resultSet.iterator();
@@ -81,7 +82,7 @@ public class TickDataDao {
 
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
-			dates.add(row.getDate("date").getTime());
+			dates.add(row.getDate("date").getMillisSinceEpoch());
 			values.add(row.getDouble("value"));
 		}
 
@@ -96,8 +97,8 @@ public class TickDataDao {
 		
 		BoundStatement boundStmt = new BoundStatement(this.selectRangeStmtTick);
 		boundStmt.setString(0, symbol);
-		boundStmt.setDate(1, new DateTime(startTime).toDate());
-		boundStmt.setDate(2, new DateTime(endTime).toDate());
+		boundStmt.setTimestamp(1, new DateTime(startTime).toDate());
+		boundStmt.setTimestamp(2, new DateTime(endTime).toDate());
 		
 		ResultSet resultSet = session.execute(boundStmt);		
 		Iterator<Row> iterator = resultSet.iterator();
@@ -108,7 +109,7 @@ public class TickDataDao {
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
 
-			dates.add(row.getDate("date").getTime());
+			dates.add(row.getDate("date").getMillisSinceEpoch());
 			values.add(row.getDouble("value"));
 		}
 
@@ -124,7 +125,7 @@ public class TickDataDao {
 		DateTime dateTime = tickData.getTime() != null ? tickData.getTime() : DateTime.now();
 		
 		boundStmt.setString(0, tickData.getKey());
-		boundStmt.setDate(1, new Timestamp(dateTime.getMillis()));
+		boundStmt.setTimestamp(1, new Timestamp(dateTime.getMillis()));
 		boundStmt.setDouble(2, tickData.getValue());
 
 		session.executeAsync(boundStmt);
@@ -141,11 +142,10 @@ public class TickDataDao {
 			DateTime dateTime = tickData.getTime() != null ? tickData.getTime() : DateTime.now();
 						
 			boundStmt.setString(0, tickData.getKey());
-			boundStmt.setDate(1, new Date(dateTime.getMillis()));
+			boundStmt.setTimestamp(1, new Date(dateTime.getMillis()));
 			boundStmt.setDouble(2, tickData.getValue());
 
-			results.add(session.executeAsync(boundStmt));
-						
+			results.add(session.executeAsync(boundStmt));								
 			TOTAL_POINTS.incrementAndGet();			
 		}
 				

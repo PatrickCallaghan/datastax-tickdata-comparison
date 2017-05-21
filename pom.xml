@@ -7,24 +7,18 @@
 	<groupId>com.datastax</groupId>
 	<artifactId>datastax-tickdb-parent</artifactId>
 	<version>0.1-SNAPSHOT</version>
-
-		<modules>
-        <module>datastax-timeseries-lib</module>
-        <module>datastax-tickdata-comparison</module>
-				<module>datastax-tickdb</module>
-    </modules>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
 			<artifactId>cassandra-driver-core</artifactId>
-			<version>2.1.9</version>
+			<version>3.1.0</version>
 		</dependency>
 		<dependency>
-	    	<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-classic</artifactId>
-    		<version>1.0.9</version>
+			<groupId>com.datastax.demo</groupId>
+			<artifactId>datastax-timeseries-lib</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>

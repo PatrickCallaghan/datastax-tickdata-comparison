@@ -11,13 +11,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.datastax.demo.utils.PropertyHelper;
+
 import au.com.bytecode.opencsv.CSVReader;
 
 public class DataLoader {
 
 	private static Logger logger = LoggerFactory.getLogger(DataLoader.class);
 	
-	private static final CharSequence EXCHANGEDATA = "small_exchangedata";
+	private static final String EXCHANGEDATA = PropertyHelper.getProperty("file", "small_exchangedata");;
 
 	public DataLoader(){}
 
@@ -36,7 +38,7 @@ public class DataLoader {
 
 		for (File file : files) {
 			try {
-				if (file.getName().contains(EXCHANGEDATA)){
+				if (file.getName().toLowerCase().startsWith(EXCHANGEDATA)){
 					allExchangeSymbols.addAll(this.getExchangeData(file));
 				}
 
